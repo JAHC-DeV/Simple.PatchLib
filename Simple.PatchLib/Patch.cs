@@ -10,11 +10,11 @@ public sealed class Patch<TModel> : Dictionary<string, object> where TModel : cl
 
         foreach (var item in this)
         {
-            var property = typeModel.GetProperty(item.Key);
+            var property = typeModel.GetProperties()
+                        .FirstOrDefault(p => string.Equals(p.Name, item.Key, StringComparison.OrdinalIgnoreCase)); ;
             if (property is not null)
             {
-                var propertyType = property.PropertyType;
-                Console.WriteLine(property.PropertyType.Name);
+                var propertyType = property.PropertyType;                
                 var jsonEle = (JsonElement)item.Value;
                 var deserializedValue = JsonSerializer.Deserialize(jsonEle.GetRawText(), propertyType, new JsonSerializerOptions
                 {
